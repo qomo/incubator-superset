@@ -43,6 +43,8 @@
   },
   "homepage": "http://superset.apache.org/",
   "dependencies": {
+    "@antv/data-set": "^0.8.9",
+    "@antv/g2": "^3.2.5",
     "@data-ui/event-flow": "^0.0.54",
     "@data-ui/sparkline": "^0.0.54",
     "@vx/responsive": "0.0.153",
