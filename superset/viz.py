@@ -228,7 +228,9 @@ class BaseViz(object):
                 df[col] = pd.to_numeric(df[col], errors='coerce')
 
     def query_obj(self):
-        """Building a query object"""
+        """Building a query object
+            构建一个供给从数据源查询数据的类json结构的对象，在自定义视图的过程中如果需要构建特定的查询结构体，就继承、覆写这个方法。
+        """
         form_data = self.form_data
         gb = form_data.get('groupby') or []
         metrics = self.all_metrics or []
@@ -1438,6 +1440,7 @@ class DistributionPieViz(NVD3Viz):
         df.sort_values(by=metric, ascending=False, inplace=True)
         df = df.reset_index()
         df.columns = ['x', 'y']
+        print("DEBUG:%s" %df.to_dict(orient='records'))
         return df.to_dict(orient='records')
 
 
@@ -2622,6 +2625,37 @@ class PartitionViz(NVD3TimeSeriesViz):
         else:
             levels = self.levels_for('agg_sum', [DTTM_ALIAS] + groups, df)
         return self.nest_values(levels)
+
+class EchartsFunnelViz(BaseViz):
+    """Funnel Chart"""
+    viz_type = 'echarts funnel'
+    is_timeseries = False
+
+    def get_data(self, df):
+        df = df.pivot_table(
+                index=self.groupby,
+                values=[self.metrics[0]])
+        df.sort_values(by=self.metrics[0], ascending=False, inplace=True)
+        df = df.reset_index()
+        df.columns = ['name', 'value']
+        return df.to_dict(orient='records')
+
+class g2PieChartViz(BaseViz):
+    """ g2 pie chart viz """
+    viz_type = 'g2_pie_chart'
+    verbose_name = _('g2 - Pie Chart')
+    is_timeseries = False
+
+    def get_data(self, df):
+        metric = self.metric_labels[0]
+        df = df.pivot_table(
+            index=self.groupby,
+            values=[metric])
+        df.sort_values(by=metric, ascending=False, inplace=True)
+        df = df.reset_index()
+        df.columns = ['item', 'count']
+        print("DEBUG:%s" %df.to_dict(orient='records'))
+        return df.to_dict(orient='records')
 
 
 viz_types = {

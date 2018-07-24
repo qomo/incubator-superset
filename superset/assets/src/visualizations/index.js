@@ -50,6 +50,7 @@ export const VIZ_TYPES = {
   deck_arc: 'deck_arc',
   deck_polygon: 'deck_polygon',
   rose: 'rose',
+  g2_pie_chart: 'g2_pie_chart',
 };
 
 const loadVis = promise =>
@@ -137,6 +138,7 @@ const vizMap = {
   [VIZ_TYPES.deck_multi]: () =>
     loadVis(import(/* webpackChunkName: "deckgl/multi" */ './deckgl/multi.jsx')),
   [VIZ_TYPES.rose]: () => loadVis(import(/* webpackChunkName: "rose" */ './rose.js')),
+  [VIZ_TYPES.g2_pie_chart]: () => loadVis(import(/* webpackChunkName: "g2_pie_chart" */ './g2_pie_chart.js')),
 };
 
 export default vizMap;
